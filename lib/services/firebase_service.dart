@@ -100,12 +100,12 @@ class FB {
       _db.collection('settings').doc('main').snapshots()
           .map((s) => s.data() ?? {});
 
-  static Stream<List<Order>> userOrdersStream(String uid) =>
+  static Stream<List<RestaurantOrder>> userOrdersStream(String uid) =>
       _db.collection('orders')
           .where('userId', isEqualTo: uid)
           .orderBy('createdAt', descending: true)
           .snapshots()
-          .map((s) => s.docs.map((d) => Order(
+          .map((s) => s.docs.map((d) => RestaurantOrder(
             id: d.id,
             status: d['status'] ?? 'pending',
             total: (d['total'] as num?)?.toDouble() ?? 0,

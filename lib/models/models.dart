@@ -32,7 +32,7 @@ class Review {
   Review({required this.id, required this.name, required this.stars, this.comment});
 }
 
-class Order {
+class RestaurantOrder {
   final String id, status;
   final double total;
   final dynamic items;
