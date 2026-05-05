@@ -27,7 +27,7 @@ jobs:
 
       - name: Create fresh project and copy source
         run: |
-          flutter create --org com.alsharq alsharq_build
+          flutter create --org restaurant alsharq_build --project-name app
           cp -r lib alsharq_build/
           cp -r assets alsharq_build/
           cp pubspec.yaml alsharq_build/
