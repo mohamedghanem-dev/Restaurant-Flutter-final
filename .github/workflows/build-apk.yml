@@ -10,45 +10,36 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          distribution: 'zulu'
+          distribution: zulu
           java-version: '17'
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.32.0'
-          channel: 'stable'
+          flutter-version: '3.24.0'
+          channel: stable
+          cache: true
 
-      - name: Create fresh project and copy source
+      - name: Write local.properties
         run: |
-          flutter create --org restaurant alsharq_build --project-name app
-          cp -r lib alsharq_build/
-          cp -r assets alsharq_build/
-          cp pubspec.yaml alsharq_build/
-          cp android/app/google-services.json alsharq_build/android/app/
-          sed -i 's/minSdk = flutter.minSdkVersion/minSdk = 23/' alsharq_build/android/app/build.gradle.kts
-          sed -i 's/ndkVersion = flutter.ndkVersion/ndkVersion = "27.0.12077973"/' alsharq_build/android/app/build.gradle.kts
-          sed -i 's/id("com.android.application") version/id("com.google.gms.google-services") version "4.4.0" apply false\n    id("com.android.application") version/' alsharq_build/android/settings.gradle.kts
-          sed -i '/^plugins {$/a\    id("com.google.gms.google-services")' alsharq_build/android/app/build.gradle.kts
+          echo "flutter.sdk=$FLUTTER_ROOT" > android/local.properties
+          echo "sdk.dir=$ANDROID_SDK_ROOT" >> android/local.properties
 
-      - name: Get dependencies
-        run: |
-          cd alsharq_build
-          flutter pub get
+      - name: Flutter pub get
+        run: flutter pub get
 
       - name: Build APK
-        run: |
-          cd alsharq_build
-          flutter build apk --release
+        run: flutter build apk --release --no-tree-shake-icons
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: alsharq-app
-          path: alsharq_build/build/app/outputs/flutter-apk/app-release.apk
+          path: build/app/outputs/flutter-apk/app-release.apk
+          retention-days: 30
