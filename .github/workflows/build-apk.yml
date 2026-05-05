@@ -25,14 +25,29 @@ jobs:
           flutter-version: '3.24.0'
           channel: 'stable'
 
+      - name: Create fresh project and copy source
+        run: |
+          flutter create --org com.alsharq alsharq_build
+          cp -r lib alsharq_build/
+          cp -r assets alsharq_build/
+          cp pubspec.yaml alsharq_build/
+          cp android/app/google-services.json alsharq_build/android/app/
+          cd alsharq_build/android
+          sed -i "s/kotlin(\"android\") version \"[^\"]*\"/kotlin(\"android\") version \"1.9.22\"/" settings.gradle
+          echo "compileSdkVersion=35" >> local.properties
+
       - name: Get dependencies
-        run: flutter pub get
+        run: |
+          cd alsharq_build
+          flutter pub get
 
       - name: Build APK
-        run: flutter build apk --release
+        run: |
+          cd alsharq_build
+          flutter build apk --release
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: alsharq-app
-          path: build/app/outputs/flutter-apk/app-release.apk
+          path: alsharq_build/build/app/outputs/flutter-apk/app-release.apk
