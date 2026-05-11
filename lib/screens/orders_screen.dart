@@ -52,7 +52,7 @@ class OrdersScreen extends StatelessWidget {
           )
         else
           SliverToBoxAdapter(
-            child: StreamBuilder<List<Order>>(
+            child: StreamBuilder<List<RestaurantOrder>>(
               stream: FB.userOrdersStream(uid),
               builder: (_, snap) {
                 if (snap.connectionState == ConnectionState.waiting)
@@ -93,7 +93,7 @@ class OrdersScreen extends StatelessWidget {
 }
 
 class _OrdersList extends StatelessWidget {
-  final List<Order> orders;
+  final List<RestaurantOrder> orders;
   const _OrdersList({required this.orders});
 
   @override
@@ -152,7 +152,7 @@ class _SummaryChip extends StatelessWidget {
 }
 
 class _OrderCard extends StatelessWidget {
-  final Order order;
+  final RestaurantOrder order;
   const _OrderCard({required this.order});
 
   static const _statusConfig = {

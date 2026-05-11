@@ -38,7 +38,7 @@ class RestaurantOrder {
   final dynamic items;
   final String? customerName, address, phone, paymentMethod;
   final DateTime? createdAt;
-  Order({required this.id, required this.status, required this.total,
+  RestaurantOrder({required this.id, required this.status, required this.total,
     required this.items, this.customerName, this.address, this.phone,
     this.paymentMethod, this.createdAt});
 }
